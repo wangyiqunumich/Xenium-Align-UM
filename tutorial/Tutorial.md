@@ -48,25 +48,27 @@ Xenium-Align-UM/
 
 ## Step 0: Image Preparation (Optional)
 
-If your raw data is bundled in complex formats (like `.ome.tif` or large vendor-specific exports) or requires reflection, complete these sub-steps before starting the alignment.
+If your raw data is bundled in complex multi-channel formats (like CosMx TIFFs) or proprietary vendor formats (like Zeiss `.czi`), you must extract them into standard 2D `.tif` images before starting the pipeline. 
 
-### Step 0.1: Extracting Images
-Use the provided extraction scripts to pull standard `.tif` or `.tiff` images from your raw data. Place the resulting files directly into the `Dataset/` folder.
-* **Extract DAPI:**
-  ```bash
-  python extract_dapi.py -input raw_data.ome.tif -output ../Dataset/{sample_name}_DAPI.tif
-  ```
-* **Extract H&E:**
-  ```bash
-  python extract_he.py -input raw_data.svs -output ../Dataset/{sample_name}_HE.tif
-  ```
+### Step 0.1: Extracting DAPI from Multi-Channel TIFF
+If your DAPI image is trapped inside a multi-channel stack, run the extraction script to pull out just the DAPI channel and save it directly to your Dataset folder:
+```bash
+python extract_dapi.py -input raw_data_cosmx.tiff -output ../Dataset/{sample_name}_DAPI.tif
+```
 
-### Step 0.2: Manual Image Reflection
-Our modified pipeline handles rotations automatically in Step 1, but **reflections (flips)** must be done manually if the tissue was mounted backward. If your H&E image appears mirrored compared to your DAPI image, run the reflection script:
+### Step 0.2: Extracting H&E from CZI files
+If your H&E image is a `.czi` file containing multiple scenes, this script will extract all scenes and save them sequentially:
+```bash
+python extract_he.py -input raw_data.czi -output_prefix ../Dataset/{sample_name}_HE
+```
+*(Note: This will generate files like `{sample_name}_HE_scene_1.tif`. Find the specific scene that contains your tissue, rename it to exactly `{sample_name}_HE.tif`, and delete the unused scenes before proceeding).*
+
+### Step 0.3: Manual Image Reflection
+Our modified pipeline handles rotations automatically in Step 1, but **reflections (flips)** must be done manually if the tissue was mounted backward on the slide. If your H&E image appears mirrored compared to your DAPI image, run the reflection script:
 ```bash
 python reflect_he.py -input ../Dataset/{sample_name}_HE.tif -output ../Dataset/{sample_name}_HE_reflected.tif
 ```
-*(Make sure to rename the final file to match your standard `{sample_name}_HE.tif` before proceeding!)*
+*(Make sure to rename the final reflected file to match your standard `{sample_name}_HE.tif` before proceeding to Step 1!)*
 
 ---
 
