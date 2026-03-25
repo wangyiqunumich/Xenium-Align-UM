@@ -191,6 +191,8 @@ To bypass the `spatialdata_io` reader checks, your dataset folder must contain t
 #### 1. The Xenium Configuration File
 * **Missing File:** `experiment.xenium`
 * **Why it is required:** This is the master metadata file. `spatialdata_io` reads this first to determine the physical pixel size and the software version. If this file is missing, the script will immediately throw a `FileNotFoundError`.
+* **How to fix:** Simply copy the existing `experiment.xenium` file in 
+`Xenium-Align-UM/Dataset/output-XETG00126_0010207_f59_20240214_210015`
 
 #### 2. The OME-TIFF Morphology Image
 * **Missing File:** `morphology_focus.ome.tif` (or `morphology_mip.ome.tif`)
