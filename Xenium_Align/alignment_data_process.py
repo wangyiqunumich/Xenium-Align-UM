@@ -34,14 +34,27 @@ def load_os_ff_sample(sample, data_file_path):
         mip_ome_tif_data_path = data_file_path+'/output-XETG00126_0010207_f59_20240214_210015/morphology_mip.ome.tif'
         nucleus_boundary_path = data_file_path+'/output-XETG00126_0010207_f59_20240214_210015/nucleus_boundaries.csv/'
         sample = 'F59'
-    else:
-        data_path = data_file_path+'/output-XETG00126_0010207_'+sample+'_20240214_210015/'
-        ome_tif_data_path = data_file_path+'/output-XETG00126_0010207_'+sample+'_20240214_210015/morphology.ome.tif'
-        focus_ome_tif_data_path = data_file_path+'/output-XETG00126_0010207_'+sample+'_20240214_210015/morphology_focus.ome.tif'
-        mip_ome_tif_data_path = data_file_path+'/output-XETG00126_0010207_'+sample+'_20240214_210015/morphology_mip.ome.tif'
-        nucleus_boundary_path = data_file_path+'/output-XETG00126_0010207_'+sample+'_20240214_210015/nucleus_boundaries.csv/'
-    he_img_path = data_file_path+'/histology_ff/'+sample+'.tif'
+    # else:
+    #     data_path = data_file_path+'/output-XETG00126_0010207_'+sample+'_20240214_210015/'
+    #     ome_tif_data_path = data_file_path+'/output-XETG00126_0010207_'+sample+'_20240214_210015/morphology.ome.tif'
+    #     focus_ome_tif_data_path = data_file_path+'/output-XETG00126_0010207_'+sample+'_20240214_210015/morphology_focus.ome.tif'
+    #     mip_ome_tif_data_path = data_file_path+'/output-XETG00126_0010207_'+sample+'_20240214_210015/morphology_mip.ome.tif'
+    #     nucleus_boundary_path = data_file_path+'/output-XETG00126_0010207_'+sample+'_20240214_210015/nucleus_boundaries.csv/'
+    # he_img_path = data_file_path+'/histology_ff/'+sample+'.tif'
 
+    # return data_path, mip_ome_tif_data_path, sample, he_img_path
+
+    else:
+        # --- OUR CUSTOM OVERRIDE FOR TID1 ---
+        data_path = data_file_path + '/'
+        
+        # Point to the exact DAPI file you named
+        mip_ome_tif_data_path = data_file_path + '/TID1_DAPI_scene_5.tif'
+        
+        # Point to the exact H&E file you named
+        # he_img_path = data_file_path + '/TID1_HE_scene_5.tif'
+        he_img_path = data_file_path + '/TID1_HE_scene_5.tif'
+        
     return data_path, mip_ome_tif_data_path, sample, he_img_path
 
 def load_os_ffpe_sample(sample, data_file_path, image_path):

@@ -1,18 +1,24 @@
+import argparse
 import tifffile
 import numpy as np
 
-# Read the original CosMx multi-channel TIFF
-input_path = 'TID1_scene5_cosmx.tiff'
-img = tifffile.imread(input_path)
+def main():
+    parser = argparse.ArgumentParser(description="Extract DAPI channel from multi-channel TIFF")
+    parser.add_argument('-input', required=True, help="Path to input multi-channel TIFF")
+    parser.add_argument('-output', required=True, help="Path to output 2D DAPI TIFF")
+    args = parser.parse_args()
 
-# Extract the 3rd channel (index 2) for DAPI
-if img.ndim == 3 and img.shape[0] < img.shape[-1]:
-    dapi_image = img[2, :, :]
-else:
-    dapi_image = img[:, :, 2]
+    print(f"Reading {args.input}...")
+    img = tifffile.imread(args.input)
 
-# Save the 2D DAPI image as a new TIFF file
-output_path = 'TID1_scene5_DAPI_extracted.tiff'
-tifffile.imwrite(output_path, dapi_image)
+    # Extract the 3rd channel (index 2) for DAPI
+    if img.ndim == 3 and img.shape[0] < img.shape[-1]:
+        dapi_image = img[2, :, :]
+    else:
+        dapi_image = img[:, :, 2]
 
-print(f"Success! Saved DAPI image to {output_path}")
+    tifffile.imwrite(args.output, dapi_image)
+    print(f"Success! Saved DAPI image to {args.output}")
+
+if __name__ == "__main__":
+    main()

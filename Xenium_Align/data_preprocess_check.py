@@ -10,7 +10,7 @@ import torch
 import random
 import argparse
 import pandas as pd
-#import tifffile
+# import tifffile
 from PIL import Image, ImageDraw
 Image.MAX_IMAGE_PIXELS = None
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
@@ -63,6 +63,9 @@ if __name__ == "__main__":
     if preservation_method == 'ff':
         #load os
         data_path, mip_ome_tif_data_path, sample, he_img_path = load_os_ff_sample(sample, data_file_path)
+        print("\n" + "="*50)
+        print(f"!!! LOADING H&E IMAGE FROM: {he_img_path} !!!")
+        print("="*50 + "\n")
     elif preservation_method == 'ffpe':
         if sample == 'kidney_cancer':
             data_file_path = data_file_path+'kidney_cancerprcc_data/'
@@ -104,7 +107,7 @@ if __name__ == "__main__":
         os.remove(he_img_path)
     
     init_rotate_list = []
-    #init rotate HE
+    # init rotate HE
     if dapi_image_height > dapi_image_width and tif_image_height < tif_image_width:
         tif_image_pillow_init = tif_image_pillow.transpose(Image.ROTATE_90)
         init_rotate_list.append('rotate90')
@@ -139,6 +142,7 @@ if __name__ == "__main__":
     
     ###rotate check
     rotate_list = ['original','flipLR','flipTB','rotate180']
+    # rotate_list = ['original']
     rotate_mse_list = []
     
     dapi_image_resize_pillow_np = np.array(dapi_image_resize_pillow)
@@ -195,6 +199,7 @@ if __name__ == "__main__":
     rotate_mse_list_np = np.array(rotate_mse_list).reshape(1,-1)
     row_max_index = np.argmax(rotate_mse_list_np)
     rotate_name = rotate_list[row_max_index]
+    # rotate_name = 'original'
     
     rotate_full_list = []
     for rotate_num in range(len(rotate_list)):

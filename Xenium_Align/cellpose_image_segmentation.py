@@ -40,8 +40,10 @@ def seed_random(seed):
     torch.backends.cudnn.deterministic = True
 
 def cellpose_he(img, min_size=15, flow_threshold=0.4, channel_cellpose=0, gpu=False):
-    model = models.Cellpose(model_type="nuclei", gpu=gpu)
-    res, _, _, _ = model.eval(
+    # model = models.Cellpose(model_type="nuclei", gpu=gpu)
+    # res, _, _, _ = model.eval(
+    model = models.CellposeModel(model_type="nuclei", gpu=gpu)
+    res, _, _ = model.eval(
         img,
         channels=[channel_cellpose, 0],
         diameter=None,

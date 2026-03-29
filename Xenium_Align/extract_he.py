@@ -1,27 +1,34 @@
+import argparse
+import os
 from aicsimageio import AICSImage
 import tifffile
 import numpy as np
 
-# 1. Load the CZI file
-input_czi = "01.czi"
-img = AICSImage(input_czi)
+def main():
+    parser = argparse.ArgumentParser(description="Extract scenes from CZI file to TIFF")
+    parser.add_argument('-input', required=True, help="Path to input CZI file")
+    parser.add_argument('-output_prefix', required=True, help="Prefix for output files (e.g., ../Dataset/TID1_HE)")
+    args = parser.parse_args()
 
-print(f"Successfully opened {input_czi}.")
-print(f"Found {len(img.scenes)} scenes (images) inside.")
+    img = AICSImage(args.input)
+    print(f"Successfully opened {args.input}.")
+    print(f"Found {len(img.scenes)} scenes (images) inside.")
 
-# 2. Loop through every scene and save it as a separate TIFF
-for i, scene_name in enumerate(img.scenes):
-    # Tell the reader to focus on the current scene
-    img.set_scene(scene_name)
-    
-    # Extract the image data. 
-    # "CYX" tells it to give us the Channels (RGB), Y (Height), and X (Width).
-    scene_data = img.get_image_data("CYX", T=0, Z=0)
-    
-    # 3. Save as a standard TIFF file
-    output_filename = f"HE_scene_{i+1}.tiff"
-    tifffile.imwrite(output_filename, scene_data)
-    
-    print(f"Saved: {output_filename}")
+    # Create directory if it doesn't exist
+    out_dir = os.path.dirname(args.output_prefix)
+    if out_dir and not os.path.exists(out_dir):
+        os.makedirs(out_dir, exist_ok=True)
 
-print("All H&E scenes extracted successfully!")
+    # Loop through every scene and save it as a separate TIFF
+    for i, scene_name in enumerate(img.scenes):
+        img.set_scene(scene_name)
+        scene_data = img.get_image_data("CYX", T=0, Z=0)
+        
+        output_filename = f"{args.output_prefix}_scene_{i+1}.tif"
+        tifffile.imwrite(output_filename, scene_data)
+        print(f"Saved: {output_filename}")
+
+    print("All H&E scenes extracted successfully!")
+
+if __name__ == "__main__":
+    main()
