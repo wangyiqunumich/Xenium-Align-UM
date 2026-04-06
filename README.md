@@ -50,6 +50,8 @@ This translator script bypasses the pipeline's strict format checks by mapping C
 python cosmx_to_xenium_translator.py
 ```
 
+### 0d. VALIS Registration
+Use VALIS package for image registration. See usage in run_valis.sh. Outputs are registracted CosMx and H&E tiff files.
 ---
 
 ## Step 1: Data Preprocess Check
